@@ -5,17 +5,13 @@
   <title>JS + CSS Clock</title>
 </head>
 <body>
-
-
-    <div class="clock">
-      <div class="clock-face">
-        <div class="hand hour-hand"></div>
-        <div class="hand min-hand"></div>
-        <div class="hand second-hand"></div>
-      </div>
+  <div class="clock">
+    <div class="clock-face">
+      <div class="hand hour-hand"></div>
+      <div class="hand min-hand"></div>
+      <div class="hand second-hand"></div>
     </div>
-
-
+  </div>
   <style>
     html {
       background: #018DED url(https://unsplash.it/1500/1000?image=881&blur=5);
@@ -62,13 +58,47 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: all 0.05s;
+      transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
     }
 
+    .notransition {
+      -webkit-transition: none !important;
+      -moz-transition: none !important;
+      -o-transition: none !important;
+      transition: none !important;
+    }
   </style>
 
   <script>
+    window.addEventListener('DOMContentLoaded', setDate);
+    setInterval(setDate, 1000);
 
+    const secondsHand = document.querySelector('.second-hand');
+    const minsHand = document.querySelector('.min-hand');
+    const hoursHand = document.querySelector('.hour-hand');
 
+    function setDate() {
+      const now = new Date();
+
+      const seconds = now.getSeconds();
+      const secondsDeg = (((seconds / 60) * 360) + 90);
+      if (seconds == 0) secondsHand.classList.add('notransition');
+      else if (Array.from(secondsHand.classList).includes('notransition')) {
+        secondsHand.classList.remove('notransition')
+      }
+      secondsHand.style.transform = `rotate(${secondsDeg}deg)`;
+
+      const minutes = now.getMinutes();
+      const minsDeg = (((minutes / 60) * 360) + 90);
+      minsHand.style.transform = `rotate(${minsDeg}deg)`;
+      
+      const hours = now.getHours();
+      const hoursDeg = (((hours / 12) * 360) + 90);
+      hoursHand.style.transform = `rotate(${hoursDeg}deg)`;
+    }
   </script>
 </body>
 </html>
