@@ -31,29 +31,104 @@
 
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    let firstInventors = inventors.filter(
+      function filterInventors(inventor) {
+        return inventor.year >= 1500 && inventor.year < 1600;
+      }
+    )
+
+    // console.log(firstInventors)
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors first and last names
+    let inventorNames = inventors.map(
+      function buildNameStr(inventor) {
+        return `${inventor.first} ${inventor.last}`;
+      })
+
+    // console.log(inventorNames);
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    let sortedInventors = inventors.sort(
+      function compareBirthDate(currentInventor, nextInventor) {
+        return currentInventor.year - nextInventor.year;
+      });
+    
+      // console.table(sortedInventors);
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live all together?
+    let yearsLivedCombined = inventors.reduce(
+      function addYearsLived(accumulator, inventor) {
+        return accumulator + (inventor.passed - inventor.year);
+      }, 0);
+    
+    // console.log(yearsLivedCombined);
 
     // 5. Sort the inventors by years lived
+    let sortedByYearsLived = inventors.sort(
+      function compareLifeSpan(inv1, inv2) {
+        return (inv1.year - inv1.passed) - (inv2.year - inv2.passed);
+      })
+
+    // console.log(sortedByYearsLived)  
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
+    let category = document.querySelector('.mw-category');
+    if (!category) {
+      console.log("No such element found on this page.")
+    } else {
+      let category = document.querySelector('.mw-category');
+      let linkEls = findLinkChildrenOf(category);
+      let names = linkEls.map(linkEl => linkEl.title)
+      let filteredBoulevards = filterByWord(names, 'de')
+      
+      // console.log(filteredBoulevards)    
+    }
 
+      function findLinkChildrenOf(el = {}, linkSelector = 'a') {
+        if (typeof el == "object" && el.nodeType == 1) {
+          return Array.from(el.querySelectorAll(String(linkSelector)))
+        } else {
+          console.log("Not a valid element node")
+        }
+      }
+      
+      function filterByWord(array, str) {
+        let filtered = array.filter(item => {
+          let arr = item.split(' ');
+          return arr.includes(str);
+        })
+        return filtered
+      }
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    let sortedByLastName = people.sort(
+      function compareLastNames(personA, personB) {
+        const [aFirstName, aLastName ] = personA.split(', ');
+        const [bFirstName, bLastName ] = personB.split(', ');
+        return aLastName > bLastName;
+      })
+    
+    // console.log(sortedByLastName);
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
 
+    let modesOfTransport = data.reduce((obj, item) => {
+      if (obj[item]) {
+        obj[item] += 1; 
+      } else {
+        obj[item] = 1;
+      }
+      return obj;
+    }, {})
+
+    // console.log(modesOfTransport);
   </script>
 </body>
 </html>
