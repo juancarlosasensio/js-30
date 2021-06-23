@@ -46,9 +46,73 @@
   <ul id="bands"></ul>
 
 <script>
-const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'];
+
+// Wes's solution...  
+// const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'];
+
+// function strip(bandName) {
+//   return bandName.replace(/^(a |the |an )/i, '').trim();
+// }
+
+// const sortedBands = bands.sort((a, b) => strip(a) > strip(b) ? 1 : -1);
+
+// document.querySelector('#bands').innerHTML =
+//   sortedBands
+//     .map(band => `<li>${band}</li>`)
+//     .join('');
+
+// console.log(sortedBands);
+
+// Jc's solution...
+const GRAMMAR_ARTICLES = ['a', 'A',  'an', 'An', 'the', 'The'];
+let BANDS = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'];
+let sortedBands = sortWithoutArticlesStart(BANDS);
+
+document.querySelector('#bands').innerHTML =
+  sortedBands
+    .map(band => `<li>${band}</li>`)
+    .join('');
+
+console.log(sortedBands)
 
 
+function startsWithGrammarArticle(bandName) {
+  let titleWords = bandName.split(' ');
+  return GRAMMAR_ARTICLES.includes(titleWords[0]);
+}
+
+function stripGrammarArticleStart(bandName) {
+  if (!startsWithGrammarArticle(bandName)) {
+    return bandName;
+  } else {
+    let bandNameWords = bandName.split(' ');
+    bandNameWords.shift();
+    return bandNameWords.join(' ');
+  }
+}
+
+function sortWithoutArticlesStart(bandNames) {
+  let bandNamesCopy = [...bandNames];
+  return bandNamesCopy.sort(
+    function sortbandNames(bandNameA, titleB) {
+      if (stripGrammarArticleStart(bandNameA) > stripGrammarArticleStart(titleB)) {
+        return 1;
+      } else {
+        return -1;
+      }
+  });
+}
+
+function sortInPlaceWithoutArticles(bandNames) {
+  return bandNames.sort(
+    function sortbandNames(bandNameA, titleB) {
+      if (stripGrammarArticleStart(bandNameA) > stripGrammarArticleStart(titleB)) {
+        return 1;
+      } else {
+        return -1;
+      }
+  });
+}
 </script>
 
 </body>
