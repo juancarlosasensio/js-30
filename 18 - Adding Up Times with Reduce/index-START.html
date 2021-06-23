@@ -182,6 +182,25 @@
     </li>
   </ul>
 <script>
+  let timeNodes = Array.from(document.querySelectorAll('[data-time]'))
+  let seconds = timeNodes
+    .map(node => node.dataset.time)
+    .map(timeCode => {
+      let [mins, secs] = timeCode.split(':').map(parseFloat)
+      return (mins * 60) + secs
+    }).reduce(function addSeconds(total, seconds) {
+      return total + seconds;
+    }, 0)
+
+  let secondsLeft = seconds;
+  let hours = Math.floor(secondsLeft / 3600);
+  secondsLeft = secondsLeft % 3600;
+  let minutes = Math.floor(secondsLeft / 60);
+  secondsLeft = secondsLeft % 60;
+  
+  console.log(`
+    Total vid time: ${hours} hours, ${minutes} minutes and ${secondsLeft} seconds.
+  `.trim())
 </script>
 </body>
 </html>
